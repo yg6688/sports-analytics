@@ -25,8 +25,13 @@ We are examining two datasets: The NBA player statistics and their historical sa
 
 Sources: https://stats.nba.com/ for performance data and https://hoopshype.com/salaries/players/ for salary data.
 
+Let us first load the data into our R environment using the read.csv function
+
 
 ```{r}
-
+players1819 <- read.csv(file = "players18-19.csv", header = TRUE)
+players1718 <- read.csv(file = "players17-18.csv", header = TRUE)
+players1617 <- read.csv(file = "players16-17.csv", header = TRUE)
+players1516 <- read.csv(file = "players15-16.csv", header = TRUE)
 ```
 
