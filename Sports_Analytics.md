@@ -39,9 +39,3 @@ players1718 <- read.csv(file = "players17-18.csv", header = TRUE)
 players1617 <- read.csv(file = "players16-17.csv", header = TRUE)
 players1516 <- read.csv(file = "players15-16.csv", header = TRUE)
 ```
-
-``` r
-file.rename("Sports_Analytics.md", "README.md")
-```
-
-    ## [1] TRUE
