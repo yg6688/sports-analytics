@@ -1,7 +1,6 @@
 Sports Analytics - An Introduction in R
 ================
 Yongqi Gan
-2/1/2019
 
 R and R Markdown
 ----------------

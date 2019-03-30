@@ -1,7 +1,6 @@
 ---
 title: "Sports Analytics - An Introduction in R"
 author: "Yongqi Gan"
-date: "2/1/2019"
 output: github_document
     
 ---
