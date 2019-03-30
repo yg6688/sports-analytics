@@ -1,7 +1,9 @@
 ---
 title: "Sports Analytics - An Introduction in R"
 author: "Yongqi Gan"
-output: github_document
+output:
+  github_document:
+    pandoc_args: [ "--output=README.md" ]
     
 ---
 
