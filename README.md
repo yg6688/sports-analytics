@@ -1,2 +1,0 @@
-# sports-analytics
-Sports Analytics

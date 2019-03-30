@@ -143,6 +143,11 @@ $(document).ready(function () {
 <h2>Loading Data</h2>
 <p>We are examining two datasets: The NBA player statistics and their historical salaries for the last 4 years.</p>
 <p>Sources: <a href="https://stats.nba.com/" class="uri">https://stats.nba.com/</a> for performance data and <a href="https://hoopshype.com/salaries/players/" class="uri">https://hoopshype.com/salaries/players/</a> for salary data.</p>
+<p>Let us first load the data into our R environment using the read.csv function</p>
+<pre class="r"><code>players1819 &lt;- read.csv(file = &quot;players18-19.csv&quot;, header = TRUE)
+players1718 &lt;- read.csv(file = &quot;players17-18.csv&quot;, header = TRUE)
+players1617 &lt;- read.csv(file = &quot;players16-17.csv&quot;, header = TRUE)
+players1516 &lt;- read.csv(file = &quot;players15-16.csv&quot;, header = TRUE)</code></pre>
 </div>
 
 
