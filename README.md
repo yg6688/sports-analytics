@@ -48,6 +48,9 @@ salary1617 <- read.csv(file = "16-17_salary.csv", header = TRUE)
 salary1516 <- read.csv(file = "15-16_salary.csv", header = TRUE)
 ```
 
+Cleaning Data
+-------------
+
 We will now merge the four dataframes for salary data and remove the individual datasets from our working environment. Note that we only include players that are accounted for in all four datasets to ensure consistency in our analysis.
 
 ``` r
@@ -73,8 +76,19 @@ df_salary$y1718 = as.numeric(gsub("[\\$,]", "", as.character(df_salary$y1718)))
 df_salary$y1819 = as.numeric(gsub("[\\$,]", "", as.character(df_salary$y1819)))
 ```
 
-Similarly, we will merge the four dataframes for player data and remove the individual datasets from our working environment.
+Preliminary Analysis, Plotting, Data Visualization
+--------------------------------------------------
+
+We want to get an overview of the data in order to get an idea of how to consider analyzing it. We can start by simply viewing the header of the data, shown below.
 
 ``` r
-#df_players <- merge(players1516, players1617, by.x = )
+head(df_salary)
 ```
+
+    ##             Player    y1516    y1617    y1718    y1819
+    ## 1    Aaron Gordon   4405071  4549389  5662481 21590909
+    ## 2      Al Horford  12671359 27748190 28530811 28928710
+    ## 3    Al Jefferson  14255279 10695850 10050366  4000000
+    ## 4 Al-Farouq Aminu   8492868  8030598  7529204  6957105
+    ## 5   Alan Williams    120677   914448  6172292    77250
+    ## 6      Alec Burks   9728947 10355341 11156939 11536515
