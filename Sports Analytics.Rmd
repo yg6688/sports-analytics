@@ -2,7 +2,6 @@
 title: "Sports Analytics - An Introduction in R"
 author: "Yongqi Gan"
 output:
-  pdf_document:
   github_document:
     pandoc_args: [ "--output=README.md" ]
     
@@ -114,7 +113,7 @@ The original plot with our newly found regression line is displayed below.
 
 ```{r}
 p + scale_y_continuous(labels = comma) + ylab("2018-2019 Salary") + 
-  xlab("Points") + ggtitle("2018-2019 Season: Salary Plotted Against Points") + 
+  xlab("Points") + ggtitle("2018-2019 Season: Salary Plotted Against ") + 
   scale_color_gradient(low="red", high="green") + geom_point() + geom_abline(intercept = 2174352, slope = 843156)
 ```
 
