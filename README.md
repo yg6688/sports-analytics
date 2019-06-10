@@ -117,10 +117,4 @@ p + scale_x_continuous(labels = comma) + xlab("2018-2019 Salary") + ylab("Points
 
 ![](Sports_Analytics_files/figure-markdown_github/unnamed-chunk-6-1.png)
 
-``` r
-p
-```
-
-![](Sports_Analytics_files/figure-markdown_github/unnamed-chunk-6-2.png)
-
 Interesting. We see that
