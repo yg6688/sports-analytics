@@ -102,6 +102,7 @@ Interesting. We see that a higher salary is generally correlated with more score
 The visual examination leads us to believe that there is a positive relationship between salary and scored points. Let's run a linear regression model to examine this numerically.
 
 ```{r}
+#lm stands for "linear model"
 points_salary <- lm(y1819 ~ PTS, data = data1819)
 summary(points_salary)
 ```
@@ -118,15 +119,19 @@ We will use a R package built by Michel Berkelaar, lpSolve, to solve this proble
 
 ```{r}
 require(lpSolve)
-C <- data1819$y1819
-A <- matrix(append(append(data1819$PTS, rep(1, times = 256)), as.vector(diag(nrow = 256))), nrow = 258, byrow = TRUE)
-B <- c(100, 12, rep(1, times = 256))
+# obj represents the objective function. This is the function that calculates the total cost of the team and is what we are trying to minimize.
+obj <- data1819$y1819
+#constr represents the constraint functions. These are the conditions that a valid solution must satisfy. The conditions we impose are that the "team" must have a minimum sum of 100 points per game, the team must have at least 12 players, and each player can only be chosen at most once.
+constr <- matrix(append(append(data1819$PTS, rep(1, times = 256)), as.vector(diag(nrow = 256))), nrow = 258, byrow = TRUE)
+#right represents the right hand side of the constraint functions.
+right <- c(100, 12, rep(1, times = 256))
+#constraints_direction represents the sign of the constraint functions.
 constranints_direction  <- c(">=", ">=", rep("<=", times = 256))
 optimum <-  lp(direction="min",
-               objective.in = C,
-               const.mat = A,
+               objective.in = obj,
+               const.mat = constr,
                const.dir = constranints_direction,
-               const.rhs = B,
+               const.rhs = right,
                all.int = T)
 
 best_sol <- optimum$solution
@@ -135,3 +140,9 @@ print(best_sol)
 ```
 
 The players with a "1" under their name have been chosen for this "optimal" team. 
+
+```{r}
+print(paste("Total cost: ", optimum$objval, sep=""))
+```
+
+We find that the total cost of this "optimal" team is 12.387 million dollars.
