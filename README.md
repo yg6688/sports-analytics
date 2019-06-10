@@ -60,7 +60,7 @@ df_salary <- merge(df_salary, salary1718, by.x = "Player", by.y = "Player")
 df_salary <- merge(df_salary, salary1819, by.x = "Player", by.y = "Player")
 
 #rm removes dataframes and vectors from our local working environment.
-rm(salary1516, salary1617, salary1718, salary1819)
+#rm(salary1516, salary1617, salary1718, salary1819)
 ```
 
 There are some issues with our data. If you click on the df\_salary dataframe in the "environment" pane on the right, you will see that the year columns have weird names and that the dollar amounts are treated as factors. Factors are categorical variables best used to describe types of values (animals classified as "dog" "cat" etc.) This is undesirable for use in numerical data, and will impact any plotting or statistical analysis we want to do. Therefore, we will convert the factor vectors into numeric vectors and rename them using the code snippet below.
@@ -74,21 +74,54 @@ df_salary$y1516 = as.numeric(gsub("[\\$,]", "", as.character(df_salary$y1516)))
 df_salary$y1617 = as.numeric(gsub("[\\$,]", "", as.character(df_salary$y1617)))
 df_salary$y1718 = as.numeric(gsub("[\\$,]", "", as.character(df_salary$y1718)))
 df_salary$y1819 = as.numeric(gsub("[\\$,]", "", as.character(df_salary$y1819)))
+
+df_salary$Player = trimws(df_salary$Player)
 ```
 
 Preliminary Analysis, Plotting, Data Visualization
 --------------------------------------------------
 
-We want to get an overview of the data in order to get an idea of how to consider analyzing it. We can start by simply viewing the header of the data, shown below.
+We want to get an overview of the data in order to get an idea of how to consider analyzing it. We can start by simply viewing the header of the salary data, shown below.
 
 ``` r
 head(df_salary)
 ```
 
-    ##             Player    y1516    y1617    y1718    y1819
-    ## 1    Aaron Gordon   4405071  4549389  5662481 21590909
-    ## 2      Al Horford  12671359 27748190 28530811 28928710
-    ## 3    Al Jefferson  14255279 10695850 10050366  4000000
-    ## 4 Al-Farouq Aminu   8492868  8030598  7529204  6957105
-    ## 5   Alan Williams    120677   914448  6172292    77250
-    ## 6      Alec Burks   9728947 10355341 11156939 11536515
+    ##            Player    y1516    y1617    y1718    y1819
+    ## 1    Aaron Gordon  4405071  4549389  5662481 21590909
+    ## 2      Al Horford 12671359 27748190 28530811 28928710
+    ## 3    Al Jefferson 14255279 10695850 10050366  4000000
+    ## 4 Al-Farouq Aminu  8492868  8030598  7529204  6957105
+    ## 5   Alan Williams   120677   914448  6172292    77250
+    ## 6      Alec Burks  9728947 10355341 11156939 11536515
+
+We can make a dotplot of 2018-2019 season salaries using the ggplot2 package.
+
+``` r
+require(scales)
+```
+
+    ## Loading required package: scales
+
+``` r
+data1819 <- merge(df_salary, players1819, by.x = "Player", by.y = "PLAYER")
+require(ggplot2)
+```
+
+    ## Loading required package: ggplot2
+
+``` r
+p <- ggplot(data = data1819, aes(x = y1819, y = PTS, colour = MIN)) +
+  geom_point()
+p
+```
+
+![](Sports_Analytics_files/figure-markdown_github/unnamed-chunk-6-1.png)
+
+``` r
+p + scale_x_continuous(labels = comma) + xlab("2018-2019 Salary") + ylab("Points") + ggtitle("2018-2019 Season: Points Plotted Against Salary") + scale_color_gradient(low="red", high="green")
+```
+
+![](Sports_Analytics_files/figure-markdown_github/unnamed-chunk-6-2.png)
+
+Interesting. We see that

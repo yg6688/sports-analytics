@@ -56,7 +56,7 @@ df_salary <- merge(df_salary, salary1718, by.x = "Player", by.y = "Player")
 df_salary <- merge(df_salary, salary1819, by.x = "Player", by.y = "Player")
 
 #rm removes dataframes and vectors from our local working environment.
-rm(salary1516, salary1617, salary1718, salary1819)
+#rm(salary1516, salary1617, salary1718, salary1819)
 ```
 
 There are some issues with our data. If you click on the df_salary dataframe in the "environment" pane on the right, you will see that the year columns have weird names and that the dollar amounts are treated as factors. Factors are categorical variables best used to describe types of values (animals classified as "dog" "cat" etc.) This is undesirable for use in numerical data, and will impact any plotting or statistical analysis we want to do. Therefore, we will convert the factor vectors into numeric vectors and rename them using the code snippet below.
@@ -70,14 +70,31 @@ df_salary$y1516 = as.numeric(gsub("[\\$,]", "", as.character(df_salary$y1516)))
 df_salary$y1617 = as.numeric(gsub("[\\$,]", "", as.character(df_salary$y1617)))
 df_salary$y1718 = as.numeric(gsub("[\\$,]", "", as.character(df_salary$y1718)))
 df_salary$y1819 = as.numeric(gsub("[\\$,]", "", as.character(df_salary$y1819)))
+
+df_salary$Player = trimws(df_salary$Player)
 ```
 
 
 ## Preliminary Analysis, Plotting, Data Visualization
 
-We want to get an overview of the data in order to get an idea of how to consider analyzing it. We can start by simply viewing the header of the data, shown below.
+We want to get an overview of the data in order to get an idea of how to consider analyzing it. We can start by simply viewing the header of the salary data, shown below.
 
 ```{r}
 head(df_salary)
 ```
+
+We can make a dotplot of 2018-2019 season salaries using the ggplot2 package.
+
+```{r}
+require(scales)
+data1819 <- merge(df_salary, players1819, by.x = "Player", by.y = "PLAYER")
+require(ggplot2)
+
+p <- ggplot(data = data1819, aes(x = y1819, y = PTS, colour = MIN)) +
+  geom_point()
+p
+p + scale_x_continuous(labels = comma) + xlab("2018-2019 Salary") + ylab("Points") + ggtitle("2018-2019 Season: Points Plotted Against Salary") + scale_color_gradient(low="red", high="green")
+```
+
+Interesting. We see that 
 
