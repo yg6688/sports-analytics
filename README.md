@@ -112,8 +112,8 @@ require(ggplot2)
 
 ``` r
 p <- ggplot(data = data1819, aes(x = y1819, y = PTS, colour = MIN)) +
-  geom_point()
-p <- p + scale_x_continuous(labels = comma) + xlab("2018-2019 Salary") + ylab("Points") + ggtitle("2018-2019 Season: Points Plotted Against Salary") + scale_color_gradient(low="red", high="green")
+  geom_point() + scale_x_continuous(labels = comma) + xlab("2018-2019 Salary") + ylab("Points") + 
+  ggtitle("2018-2019 Season: Points Plotted Against Salary") + scale_color_gradient(low="red", high="green")
 p
 ```
 
