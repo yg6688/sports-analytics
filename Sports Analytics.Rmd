@@ -83,15 +83,17 @@ We want to get an overview of the data in order to get an idea of how to conside
 head(df_salary)
 ```
 
-We can make a dotplot of 2018-2019 season salaries using the ggplot2 package.
+We can make a dotplot of 2018-2019 season salaries against points scored using the ggplot2 package, a popul. We will also show minutes played using a color gradient.
 
 ```{r}
+require(ggplot2)
 require(scales)
 data1819 <- merge(df_salary, players1819, by.x = "Player", by.y = "PLAYER")
-require(ggplot2)
 
 p <- ggplot(data = data1819, aes(x = y1819, y = PTS, colour = MIN))
-p + scale_x_continuous(labels = comma) + xlab("2018-2019 Salary") + ylab("Points") + ggtitle("2018-2019 Season: Points Plotted Against Salary") + scale_color_gradient(low="red", high="green") + geom_point()
+p + scale_x_continuous(labels = comma) + xlab("2018-2019 Salary") + 
+  ylab("Points") + ggtitle("2018-2019 Season: Points Plotted Against Salary") + 
+  scale_color_gradient(low="red", high="green") + geom_point()
 ```
 
 Interesting. We see that 

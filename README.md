@@ -95,7 +95,13 @@ head(df_salary)
     ## 5   Alan Williams   120677   914448  6172292    77250
     ## 6      Alec Burks  9728947 10355341 11156939 11536515
 
-We can make a dotplot of 2018-2019 season salaries using the ggplot2 package.
+We can make a dotplot of 2018-2019 season salaries against points scored using the ggplot2 package, a popul. We will also show minutes played using a color gradient.
+
+``` r
+require(ggplot2)
+```
+
+    ## Loading required package: ggplot2
 
 ``` r
 require(scales)
@@ -105,14 +111,11 @@ require(scales)
 
 ``` r
 data1819 <- merge(df_salary, players1819, by.x = "Player", by.y = "PLAYER")
-require(ggplot2)
-```
 
-    ## Loading required package: ggplot2
-
-``` r
 p <- ggplot(data = data1819, aes(x = y1819, y = PTS, colour = MIN))
-p + scale_x_continuous(labels = comma) + xlab("2018-2019 Salary") + ylab("Points") + ggtitle("2018-2019 Season: Points Plotted Against Salary") + scale_color_gradient(low="red", high="green") + geom_point()
+p + scale_x_continuous(labels = comma) + xlab("2018-2019 Salary") + 
+  ylab("Points") + ggtitle("2018-2019 Season: Points Plotted Against Salary") + 
+  scale_color_gradient(low="red", high="green") + geom_point()
 ```
 
 ![](Sports_Analytics_files/figure-markdown_github/unnamed-chunk-6-1.png)
