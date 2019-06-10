@@ -54,15 +54,13 @@ Cleaning Data
 We will now merge the four dataframes for salary data and remove the individual datasets from our working environment. Note that we only include players that are accounted for in all four datasets to ensure consistency in our analysis.
 
 ``` r
-# merge concactenates two dataframes together by values in a
-# certain row or column.
+#merge concactenates two dataframes together by values in a certain row or column.
 df_salary <- merge(salary1516, salary1617, by.x = "Player", by.y = "Player")
 df_salary <- merge(df_salary, salary1718, by.x = "Player", by.y = "Player")
 df_salary <- merge(df_salary, salary1819, by.x = "Player", by.y = "Player")
 
-# rm removes dataframes and vectors from our local working
-# environment. rm(salary1516, salary1617, salary1718,
-# salary1819)
+#rm removes dataframes and vectors from our local working environment.
+#rm(salary1516, salary1617, salary1718, salary1819)
 ```
 
 There are some issues with our data. If you click on the df\_salary dataframe in the "environment" pane on the right, you will see that the year columns have weird names and that the dollar amounts are treated as factors. Factors are categorical variables best used to describe types of values (animals classified as "dog" "cat" etc.) This is undesirable for use in numerical data, and will impact any plotting or statistical analysis we want to do. Therefore, we will convert the factor vectors into numeric vectors and rename them using the code snippet below.
@@ -77,8 +75,7 @@ df_salary$y1617 = as.numeric(gsub("[\\$,]", "", as.character(df_salary$y1617)))
 df_salary$y1718 = as.numeric(gsub("[\\$,]", "", as.character(df_salary$y1718)))
 df_salary$y1819 = as.numeric(gsub("[\\$,]", "", as.character(df_salary$y1819)))
 
-# Trim unnecessary whitespace to prevent string matching
-# errors
+#Trim unnecessary whitespace to prevent string matching errors
 df_salary$Player = trimws(df_salary$Player)
 ```
 
@@ -118,8 +115,8 @@ data1819 <- merge(df_salary, players1819, by.x = "Player", by.y = "PLAYER")
 
 p <- ggplot(data = data1819, aes(y = y1819, x = PTS, colour = MIN))
 p + scale_y_continuous(labels = comma) + ylab("2018-2019 Salary") + 
-    xlab("Points") + ggtitle("2018-2019 Season: Salary Plotted Against Points") + 
-    scale_color_gradient(low = "red", high = "green") + geom_point()
+  xlab("Points") + ggtitle("2018-2019 Season: Salary Plotted Against Points") + 
+  scale_color_gradient(low="red", high="green") + geom_point()
 ```
 
 ![](Sports_Analytics_files/figure-markdown_github/unnamed-chunk-6-1.png)
@@ -129,7 +126,7 @@ Interesting. We see that a higher salary is generally correlated with more score
 The visual examination leads us to believe that there is a positive relationship between salary and scored points. Let's run a linear regression model to examine this numerically.
 
 ``` r
-# lm stands for 'linear model'
+#lm stands for "linear model"
 points_salary <- lm(y1819 ~ PTS, data = data1819)
 summary(points_salary)
 ```
@@ -159,9 +156,8 @@ The original plot with our newly found regression line is displayed below.
 
 ``` r
 p + scale_y_continuous(labels = comma) + ylab("2018-2019 Salary") + 
-    xlab("Points") + ggtitle("2018-2019 Season: Salary Plotted Against ") + 
-    scale_color_gradient(low = "red", high = "green") + geom_point() + 
-    geom_abline(intercept = 2174352, slope = 843156)
+  xlab("Points") + ggtitle("2018-2019 Season: Salary Plotted Against ") + 
+  scale_color_gradient(low="red", high="green") + geom_point() + geom_abline(intercept = 2174352, slope = 843156)
 ```
 
 ![](Sports_Analytics_files/figure-markdown_github/unnamed-chunk-8-1.png)
@@ -182,26 +178,20 @@ require(lpSolve)
     ## Loading required package: lpSolve
 
 ``` r
-# obj represents the objective function. This is the function
-# that calculates the total cost of the team and is what we
-# are trying to minimize.
+# obj represents the objective function. This is the function that calculates the total cost of the team and is what we are trying to minimize.
 obj <- data1819$y1819
-# constr represents the constraint functions. These are the
-# conditions that a valid solution must satisfy. The
-# conditions we impose are that the 'team' must have a
-# minimum sum of 100 points per game, the team must have at
-# least 12 players, and each player can only be chosen at
-# most once.
-constr <- matrix(append(append(data1819$PTS, rep(1, times = 256)), 
-    as.vector(diag(nrow = 256))), nrow = 258, byrow = TRUE)
-# right represents the right hand side of the constraint
-# functions.
+#constr represents the constraint functions. These are the conditions that a valid solution must satisfy. The conditions we impose are that the "team" must have a minimum sum of 100 points per game, the team must have at least 12 players, and each player can only be chosen at most once.
+constr <- matrix(append(append(data1819$PTS, rep(1, times = 256)), as.vector(diag(nrow = 256))), nrow = 258, byrow = TRUE)
+#right represents the right hand side of the constraint functions.
 right <- c(100, 12, rep(1, times = 256))
-# constraints_direction represents the sign of the constraint
-# functions.
-constranints_direction <- c(">=", ">=", rep("<=", times = 256))
-optimum <- lp(direction = "min", objective.in = obj, const.mat = constr, 
-    const.dir = constranints_direction, const.rhs = right, all.int = T)
+#constraints_direction represents the sign of the constraint functions.
+constranints_direction  <- c(">=", ">=", rep("<=", times = 256))
+optimum <-  lp(direction="min",
+               objective.in = obj,
+               const.mat = constr,
+               const.dir = constranints_direction,
+               const.rhs = right,
+               all.int = T)
 
 best_sol <- optimum$solution
 names(best_sol) <- data1819$Player
@@ -384,7 +374,7 @@ print(best_sol)
 The players with a "1" under their name have been chosen for this "optimal" team.
 
 ``` r
-print(paste("Total cost: ", optimum$objval, sep = ""))
+print(paste("Total cost: ", optimum$objval, sep=""))
 ```
 
     ## [1] "Total cost: 12387465"
