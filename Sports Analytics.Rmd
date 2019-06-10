@@ -6,7 +6,6 @@ output:
     pandoc_args: [ "--output=README.md" ]
     
 ---
-
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
