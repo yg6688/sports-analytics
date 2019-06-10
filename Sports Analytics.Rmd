@@ -113,7 +113,7 @@ The original plot with our newly found regression line is displayed below.
 
 ```{r}
 p + scale_y_continuous(labels = comma) + ylab("2018-2019 Salary") + 
-  xlab("Points") + ggtitle("2018-2019 Season: Salary Plotted Against ") + 
+  xlab("Points") + ggtitle("2018-2019 Season: Salary Plotted Against Points") + 
   scale_color_gradient(low="red", high="green") + geom_point() + geom_abline(intercept = 2174352, slope = 843156)
 ```
 
