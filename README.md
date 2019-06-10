@@ -75,6 +75,7 @@ df_salary$y1617 = as.numeric(gsub("[\\$,]", "", as.character(df_salary$y1617)))
 df_salary$y1718 = as.numeric(gsub("[\\$,]", "", as.character(df_salary$y1718)))
 df_salary$y1819 = as.numeric(gsub("[\\$,]", "", as.character(df_salary$y1819)))
 
+#Trim unnecessary whitespace to prevent string matching errors
 df_salary$Player = trimws(df_salary$Player)
 ```
 
@@ -120,4 +121,32 @@ p + scale_x_continuous(labels = comma) + xlab("2018-2019 Salary") +
 
 ![](Sports_Analytics_files/figure-markdown_github/unnamed-chunk-6-1.png)
 
-Interesting. We see that
+Interesting. We see that a higher salary is generally correlated with more scored points and more minutes played on average. This is likely an obvious observation to most of you, but it is helpful to see it confirmed graphically.
+
+The visual examination leads us to believe that there is a positive relationship between salary and scored points. Let's run a linear regression model to examine this numerically.
+
+``` r
+points_salary <- lm(y1819 ~ PTS, data = data1819)
+summary(points_salary)
+```
+
+    ## 
+    ## Call:
+    ## lm(formula = y1819 ~ PTS, data = data1819)
+    ## 
+    ## Residuals:
+    ##       Min        1Q    Median        3Q       Max 
+    ## -21203611  -4704150   -789194   4028796  20410886 
+    ## 
+    ## Coefficients:
+    ##             Estimate Std. Error t value Pr(>|t|)    
+    ## (Intercept)  2174352     830607   2.618  0.00938 ** 
+    ## PTS           843156      65573  12.858  < 2e-16 ***
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## Residual standard error: 6814000 on 254 degrees of freedom
+    ## Multiple R-squared:  0.3943, Adjusted R-squared:  0.3919 
+    ## F-statistic: 165.3 on 1 and 254 DF,  p-value: < 2.2e-16
+
+Let's interpret this regression output. The line of best fit is given by data1819 = 2,174,352 + 843,156 \* PTS. We can interpret this to mean that for every additional point scored, on average the salary of that player will increase by 843,156 dollars. We note the small p-value (less than 2<sup>−16</sup>), implying our results are statistically significant at the 99.99% confidence level.
