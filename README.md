@@ -111,9 +111,8 @@ require(ggplot2)
     ## Loading required package: ggplot2
 
 ``` r
-p <- ggplot(data = data1819, aes(x = y1819, y = PTS, colour = MIN)) +
-  geom_point()
-p + scale_x_continuous(labels = comma) + xlab("2018-2019 Salary") + ylab("Points") + ggtitle("2018-2019 Season: Points Plotted Against Salary") + scale_color_gradient(low="red", high="green")
+p <- ggplot(data = data1819, aes(x = y1819, y = PTS, colour = MIN))
+p + scale_x_continuous(labels = comma) + xlab("2018-2019 Salary") + ylab("Points") + ggtitle("2018-2019 Season: Points Plotted Against Salary") + scale_color_gradient(low="red", high="green") + geom_point()
 ```
 
 ![](Sports_Analytics_files/figure-markdown_github/unnamed-chunk-6-1.png)
