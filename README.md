@@ -150,3 +150,210 @@ summary(points_salary)
     ## F-statistic: 165.3 on 1 and 254 DF,  p-value: < 2.2e-16
 
 Let's interpret this regression output. The line of best fit is given by data1819 = 2,174,352 + 843,156 \* PTS. We can interpret this to mean that for every additional point scored, on average the salary of that player will increase by 843,156 dollars. We note the small p-value (less than 2<sup>−16</sup>), implying our results are statistically significant at the 99.99% confidence level.
+
+Optimization Example: Linear Programming
+----------------------------------------
+
+To demonstrate the power of R packages, let's consider a hypothetical scenario: You are the manager of an NBA team. Your goal is to score at least 100 points every game on average, while spending as little as possible on the players' salaries.
+
+This is an optimization problem. We are trying to minimize a cost function (total salary cost), given a constraint (average at least 100 points). We can solve this optimization problem using a technique known as linear programming. For technical details you are welcome to review <https://www.math.ucla.edu/~tom/LP.pdf>; however, a technical understanding of the algorithm is not necessary for this example.
+
+We will use a R package built by Michel Berkelaar, lpSolve, to solve this problem. R packages are custom-written libraries developed by statistians, companies, and other users to extend or the functionality of R or to simplify certain procedures.
+
+``` r
+require(lpSolve)
+```
+
+    ## Loading required package: lpSolve
+
+``` r
+C <- data1819$y1819
+A <- matrix(append(append(data1819$PTS, rep(1, times = 256)), as.vector(diag(nrow = 256))), nrow = 258, byrow = TRUE)
+B <- c(100, 12, rep(1, times = 256))
+constranints_direction  <- c(">=", ">=", rep("<=", times = 256))
+optimum <-  lp(direction="min",
+               objective.in = C,
+               const.mat = A,
+               const.dir = constranints_direction,
+               const.rhs = B,
+               all.int = T)
+
+best_sol <- optimum$solution
+names(best_sol) <- data1819$Player
+print(best_sol)
+```
+
+    ##             Aaron Gordon               Al Horford          Al-Farouq Aminu 
+    ##                        0                        0                        0 
+    ##            Alan Williams               Alec Burks                 Alex Len 
+    ##                        1                        0                        0 
+    ##             Allen Crabbe             Amir Johnson           Andre Drummond 
+    ##                        0                        0                        0 
+    ##           Andre Iguodala             Andrew Bogut           Andrew Wiggins 
+    ##                        0                        1                        0 
+    ##            Anthony Davis         Anthony Tolliver              Aron Baynes 
+    ##                        0                        0                        0 
+    ##            Austin Rivers            Avery Bradley             Ben McLemore 
+    ##                        0                        0                        0 
+    ##          Bismack Biyombo            Blake Griffin         Boban Marjanovic 
+    ##                        0                        0                        0 
+    ##             Bobby Portis         Bojan Bogdanovic             Bradley Beal 
+    ##                        0                        0                        0 
+    ##           Brandon Knight              Brook Lopez            Bruno Caboclo 
+    ##                        0                        0                        1 
+    ##            Cameron Payne          Carmelo Anthony         Chandler Parsons 
+    ##                        0                        0                        0 
+    ##            Channing Frye               Chris Paul              CJ McCollum 
+    ##                        0                        0                        0 
+    ##                 CJ Miles             Clint Capela              Cody Zeller 
+    ##                        0                        0                        0 
+    ##             Corey Brewer              Cory Joseph             Courtney Lee 
+    ##                        1                        0                        0 
+    ##        Cristiano Felicio         D'Angelo Russell           Damian Lillard 
+    ##                        0                        0                        0 
+    ##         Danilo Gallinari              Danny Green         Dante Cunningham 
+    ##                        0                        0                        0 
+    ##               Dante Exum          Darren Collison           DeAndre Jordan 
+    ##                        0                        0                        0 
+    ##             Delon Wright            DeMar DeRozan         DeMarcus Cousins 
+    ##                        0                        0                        0 
+    ##          DeMarre Carroll           Derrick Favors             Derrick Rose 
+    ##                        0                        0                        1 
+    ##             Devin Booker             Devin Harris           Dewayne Dedmon 
+    ##                        1                        0                        0 
+    ##             Dion Waiters            Dirk Nowitzki           Doug McDermott 
+    ##                        0                        0                        0 
+    ##           Draymond Green            Dwight Howard            Dwight Powell 
+    ##                        0                        0                        0 
+    ##              Dwyane Wade            E'Twaun Moore                 Ed Davis 
+    ##                        0                        0                        0 
+    ##            Elfrid Payton          Emmanuel Mudiay              Enes Kanter 
+    ##                        0                        0                        0 
+    ##             Eric Bledsoe              Eric Gordon           Ersan Ilyasova 
+    ##                        0                        0                        0 
+    ##            Evan Fournier              Evan Turner           Frank Kaminsky 
+    ##                        0                        0                        0 
+    ##           Garrett Temple              Gary Harris              George Hill 
+    ##                        0                        0                        0 
+    ##             Gerald Green    Giannis Antetokounmpo       Glenn Robinson III 
+    ##                        1                        0                        0 
+    ##             Goran Dragic           Gordon Hayward             Gorgui Dieng 
+    ##                        0                        0                        0 
+    ##              Greg Monroe          Harrison Barnes         Hassan Whiteside 
+    ##                        0                        0                        0 
+    ##                Ian Clark              Ian Mahinmi            Iman Shumpert 
+    ##                        0                        0                        0 
+    ##            Isaiah Canaan            Isaiah Thomas            Jabari Parker 
+    ##                        1                        0                        0 
+    ##              Jae Crowder            Jahlil Okafor           Jamal Crawford 
+    ##                        0                        0                        0 
+    ##             James Harden            James Johnson           JaMychal Green 
+    ##                        0                        0                        0 
+    ##             Jared Dudley            Jarell Martin              Jason Smith 
+    ##                        0                        0                        0 
+    ##             JaVale McGee               Jeff Green              Jeff Teague 
+    ##                        0                        0                        0 
+    ##             Jerami Grant              Jeremy Lamb               Jeremy Lin 
+    ##                        0                        0                        0 
+    ##             Jerian Grant           Jerryd Bayless             Jimmy Butler 
+    ##                        0                        0                        0 
+    ##                JJ Redick              Joakim Noah              Jodie Meeks 
+    ##                        0                        0                        0 
+    ##               Joe Harris               Joe Ingles              Joel Embiid 
+    ##                        0                        0                        0 
+    ##              John Henson                John Wall                Jon Leuer 
+    ##                        0                        0                        0 
+    ##            Jonas Jerebko        Jonas Valanciunas         Jonathon Simmons 
+    ##                        0                        0                        0 
+    ##          Jordan Clarkson            Jose Calderon          Josh Richardson 
+    ##                        0                        0                        0 
+    ##                 JR Smith             Jrue Holiday            Julius Randle 
+    ##                        0                        0                        0 
+    ##          Justin Anderson           Justin Holiday          Justise Winslow 
+    ##                        0                        0                        0 
+    ##             Jusuf Nurkic       Karl-Anthony Towns            Kawhi Leonard 
+    ##                        0                        0                        0 
+    ##             Kelly Olynyk             Kemba Walker           Kenneth Faried 
+    ##                        0                        0                        0 
+    ##            Kent Bazemore Kentavious Caldwell-Pope             Kevin Durant 
+    ##                        0                        0                        0 
+    ##               Kevin Love             Kevon Looney          Khris Middleton 
+    ##                        0                        0                        0 
+    ##            Klay Thompson             Kosta Koufos            Kyle Anderson 
+    ##                        0                        0                        0 
+    ##              Kyle Korver               Kyle Lowry             Kyle O'Quinn 
+    ##                        0                        0                        0 
+    ##             Kyrie Irving        LaMarcus Aldridge         Lance Stephenson 
+    ##                        0                        0                        0 
+    ##             Lance Thomas        Langston Galloway             LeBron James 
+    ##                        0                        0                        0 
+    ##         Luc Mbah a Moute                Luol Deng               Marc Gasol 
+    ##                        0                        0                        0 
+    ##            Marcin Gortat          Marco Belinelli            Marcus Morris 
+    ##                        0                        0                        0 
+    ##             Marcus Smart            Mario Hezonja          Markieff Morris 
+    ##                        0                        0                        0 
+    ##          Marvin Williams            Mason Plumlee      Matthew Dellavedova 
+    ##                        0                        0                        0 
+    ##           Meyers Leonard          Michael Beasley  Michael Carter-Williams 
+    ##                        0                        0                        0 
+    ##   Michael Kidd-Gilchrist              Mike Conley             Mike Muscala 
+    ##                        0                        0                        0 
+    ##               Mike Scott            Miles Plumlee         Montrezl Harrell 
+    ##                        0                        0                        0 
+    ##             Myles Turner          Nemanja Bjelica             Nerlens Noel 
+    ##                        0                        0                        0 
+    ##               Nick Young            Nicolas Batum             Nik Stauskas 
+    ##                        1                        0                        0 
+    ##             Nikola Jokic           Nikola Mirotic           Nikola Vucevic 
+    ##                        0                        0                        0 
+    ##              Noah Vonleh            Norman Powell              Omri Casspi 
+    ##                        0                        0                        0 
+    ##          Pat Connaughton         Patrick Beverley        Patrick Patterson 
+    ##                        0                        0                        0 
+    ##                Pau Gasol              Paul George             Paul Millsap 
+    ##                        0                        0                        0 
+    ##                PJ Tucker               Quincy Acy         Quincy Pondexter 
+    ##                        0                        1                        0 
+    ##              Rajon Rondo                Raul Neto           Raymond Felton 
+    ##                        0                        0                        0 
+    ##           Reggie Bullock           Reggie Jackson           Richaun Holmes 
+    ##                        0                        0                        0 
+    ##              Ricky Rubio         Robert Covington              Robin Lopez 
+    ##                        0                        0                        0 
+    ##              Rodney Hood  Rondae Hollis-Jefferson                 Rudy Gay 
+    ##                        0                        0                        0 
+    ##              Rudy Gobert        Russell Westbrook            Ryan Anderson 
+    ##                        0                        0                        0 
+    ##              Salah Mejri               Sam Dekker              Serge Ibaka 
+    ##                        0                        0                        0 
+    ##               Seth Curry           Shabazz Napier         Shaun Livingston 
+    ##                        0                        0                        0 
+    ##             Shelvin Mack             Solomon Hill        Spencer Dinwiddie 
+    ##                        0                        0                        1 
+    ##          Stanley Johnson            Stephen Curry             Steven Adams 
+    ##                        0                        0                        0 
+    ##               Taj Gibson            Terrence Ross             Terry Rozier 
+    ##                        0                        0                        0 
+    ##          Thabo Sefolosha           Thaddeus Young              Tim Frazier 
+    ##                        0                        0                        0 
+    ##            Tobias Harris              Tony Parker               Tony Snell 
+    ##                        0                        0                        0 
+    ##           Treveon Graham             Trevor Ariza               Trey Burke 
+    ##                        0                        0                        0 
+    ##               Trey Lyles         Tristan Thompson             Troy Daniels 
+    ##                        0                        0                        0 
+    ##            Tyler Johnson             Tyler Zeller             Tyreke Evans 
+    ##                        0                        1                        0 
+    ##           Tyson Chandler               Tyus Jones            Udonis Haslem 
+    ##                        0                        0                        0 
+    ##           Victor Oladipo             Vince Carter          Wayne Ellington 
+    ##                        0                        0                        0 
+    ##           Wesley Johnson          Wesley Matthews              Will Barton 
+    ##                        0                        0                        0 
+    ##      Willie Cauley-Stein          Wilson Chandler              Zach LaVine 
+    ##                        0                        0                        0 
+    ##            Zaza Pachulia 
+    ##                        0
+
+The players with a "1" under their name have been chosen for this "optimal" team.

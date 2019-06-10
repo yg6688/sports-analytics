@@ -108,6 +108,8 @@ summary(points_salary)
 
 Let's interpret this regression output. The line of best fit is given by data1819 = 2,174,352 + 843,156 * PTS. We can interpret this to mean that for every additional point scored, on average the salary of that player will increase by 843,156 dollars. We note the small p-value (less than $2^{-16}$), implying our results are statistically significant at the 99.99% confidence level.
 
+## Optimization Example: Linear Programming
+
 To demonstrate the power of R packages, let's consider a hypothetical scenario: You are the manager of an NBA team. Your goal is to score at least 100 points every game on average, while spending as little as possible on the players' salaries.
 
 This is an optimization problem. We are trying to minimize a cost function (total salary cost), given a constraint (average at least 100 points). We can solve this optimization problem using a technique known as linear programming. For technical details you are welcome to review <https://www.math.ucla.edu/~tom/LP.pdf>; however, a technical understanding of the algorithm is not necessary for this example.
