@@ -110,6 +110,8 @@ require(scales)
 
     ## Loading required package: scales
 
+    ## Warning: package 'scales' was built under R version 3.4.4
+
 ``` r
 data1819 <- merge(df_salary, players1819, by.x = "Player", by.y = "PLAYER")
 
@@ -380,3 +382,86 @@ print(paste("Total cost: ", optimum$objval, sep=""))
     ## [1] "Total cost: 12387465"
 
 We find that the total cost of this "optimal" team is 12.387 million dollars.
+
+Categorical Variable Analysis: Does switching teams increase expected salary?
+-----------------------------------------------------------------------------
+
+It is widely understood in the professional basketball world that switching teams generally results in an increase in salary. We will now quantitatively test this hypothesis and determine the size of this effect.
+
+First, we need to extract only the players who were active in the last 4 seasons:
+
+``` r
+player <- merge(merge(merge(players1516[ , c("PLAYER", "TEAM")], players1617[ , c("PLAYER", "TEAM")], by = "PLAYER"), players1718[ , c("PLAYER", "TEAM")], by = "PLAYER"), players1819[ , c("PLAYER", "TEAM")], by = "PLAYER")
+```
+
+    ## Warning in merge.data.frame(merge(merge(players1516[, c("PLAYER",
+    ## "TEAM")], : column names 'TEAM.x', 'TEAM.y' are duplicated in the result
+
+``` r
+names(player) <- c("PLAYER", "TEAM1516", "TEAM1617", "TEAM1718", "TEAM1819")
+```
+
+Now we can count the number of times each player switched teams:
+
+``` r
+player$switches <- 0
+player$switches <- ifelse(player$TEAM1516 == player$TEAM1617, player$switches, player$switches + 1)
+player$switches <- ifelse(player$TEAM1617 == player$TEAM1718, player$switches, player$switches + 1)
+player$switches <- ifelse(player$TEAM1718 == player$TEAM1819, player$switches, player$switches + 1)
+```
+
+Let's add the salary data to this dataset:
+
+``` r
+player <- merge(player, df_salary, by.x = "PLAYER", by.y = "Player")
+player2 <- player
+player2$change <- player2$y1819 - player2$y1516
+require(reshape)
+```
+
+    ## Loading required package: reshape
+
+    ## Warning: package 'reshape' was built under R version 3.4.4
+
+``` r
+player <- melt(player, id = c("PLAYER", "TEAM1516", "TEAM1617", "TEAM1718", "TEAM1819", "switches"))
+```
+
+We can create a plot of salaries based on the number of team switches:
+
+``` r
+p <- ggplot(data = player, aes(y = value, x = variable, colour = switches))
+p + scale_y_continuous(labels = comma) + ylab("Salary") + 
+  xlab("Season") + ggtitle("Salary Plotted Against Number of Team Switches") + 
+  scale_color_gradient(low="red", high="green") + geom_point()
+```
+
+![](Sports_Analytics_files/figure-markdown_github/unnamed-chunk-15-1.png)
+
+The graph doesn't seem to be too promising on first glance. Let's run a regression analysis on the change in salary across these four seasons given the change in teams:
+
+``` r
+switch_lm <- lm(change ~ switches, data = player2)
+summary(switch_lm)
+```
+
+    ## 
+    ## Call:
+    ## lm(formula = change ~ switches, data = player2)
+    ## 
+    ## Residuals:
+    ##       Min        1Q    Median        3Q       Max 
+    ## -20935449  -4550918   -402481   4353721  18122651 
+    ## 
+    ## Coefficients:
+    ##             Estimate Std. Error t value Pr(>|t|)    
+    ## (Intercept)  8427039     708532  11.894  < 2e-16 ***
+    ## switches    -3266267     477605  -6.839 6.23e-11 ***
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## Residual standard error: 6925000 on 247 degrees of freedom
+    ## Multiple R-squared:  0.1592, Adjusted R-squared:  0.1558 
+    ## F-statistic: 46.77 on 1 and 247 DF,  p-value: 6.232e-11
+
+We find that this is in fact exactly the case. A team switch on average will decrease a player's earnings by $3.26 million.
